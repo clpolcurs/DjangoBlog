@@ -9,10 +9,10 @@ from djangoblog.utils import get_current_site
 # Create your models here.
 
 class BlogUser(AbstractUser):
-    nickname = models.CharField('昵称', max_length=100, blank=True)
-    created_time = models.DateTimeField('创建时间', default=now)
-    last_mod_time = models.DateTimeField('修改时间', default=now)
-    source = models.CharField("创建来源", max_length=100, blank=True)
+    nickname = models.CharField('Nickname', max_length=100, blank=True)
+    created_time = models.DateTimeField('Created at', default=now)
+    last_mod_time = models.DateTimeField('Modified at', default=now)
+    source = models.CharField("Create a source", max_length=100, blank=True)
 
     def get_absolute_url(self):
         return reverse(
@@ -24,12 +24,10 @@ class BlogUser(AbstractUser):
 
     def get_full_url(self):
         site = get_current_site().domain
-        url = "https://{site}{path}".format(site=site,
-                                            path=self.get_absolute_url())
-        return url
+        return "https://{site}{path}".format(site=site, path=self.get_absolute_url())
 
     class Meta:
         ordering = ['-id']
-        verbose_name = "用户"
-        verbose_name_plural = verbose_name
+        verbose_name = "User"
+        verbose_name_plural = "Users"
         get_latest_by = 'id'

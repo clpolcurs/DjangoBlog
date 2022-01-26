@@ -40,7 +40,7 @@ class DjangoBlogAdminSite(AdminSite):
 
 admin_site = DjangoBlogAdminSite(name='admin')
 
-admin_site.register(Article, ArticlelAdmin)
+admin_site.register(Article, ArticleAdmin)
 admin_site.register(Category, CategoryAdmin)
 admin_site.register(Tag, TagAdmin)
 admin_site.register(Links, LinksAdmin)

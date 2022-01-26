@@ -8,7 +8,7 @@
             {% if  isindex %}
                 {% if article.article_order > 0 %}
                     <a href="{{ article.get_absolute_url }}"
-                       rel="bookmark">【置顶】{{ article.title }}</a>
+                       rel="bookmark">Top {{ article.title }}</a>
                 {% else %}
                     <a href="{{ article.get_absolute_url }}"
                        rel="bookmark">{{ article.title }}</a>
@@ -24,9 +24,9 @@
                    rel="nofollow">
                     <span class="leave-reply">
                     {% if article.comment_set and article.comment_set.count %}
-                        {{ article.comment_set.count }}个评论
+                        {{ article.comment_set.count }} comment(s)
                     {% else %}
-                        发表评论
+                        Comment
                     {% endif %}
                     </span>
                 </a>
@@ -54,7 +54,7 @@
             {% get_markdown_toc article.body as markdown %}
             {% if article.show_toc %}
 
-                <b>目录:</b>
+                <b>Content:</b>
                 {{ markdown.0|safe }}
 
                 <hr class="break_line"/>

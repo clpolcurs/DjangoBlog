@@ -46,7 +46,7 @@ def send_email_signal_handler(sender, **kwargs):
         result = msg.send()
         log.send_result = result > 0
     except Exception as e:
-        logger.error(f"失败邮箱号: {emailto}, {e}")
+        logger.error(f"Invalid email: {emailto}, {e}")
         log.send_result = False
     log.save()
 
@@ -56,7 +56,7 @@ def oauth_user_login_signal_handler(sender, **kwargs):
     id = kwargs['id']
     oauthuser = OAuthUser.objects.get(id=id)
     site = get_current_site().domain
-    if oauthuser.picture and not oauthuser.picture.find(site) >= 0:
+    if oauthuser.picture and oauthuser.picture.find(site) < 0:
         from djangoblog.utils import save_user_avatar
         oauthuser.picture = save_user_avatar(oauthuser.picture)
         oauthuser.save()
@@ -92,7 +92,7 @@ def model_post_save_callback(
         path = instance.article.get_absolute_url()
         site = get_current_site().domain
         if site.find(':') > 0:
-            site = site[0:site.find(':')]
+            site = site[:site.find(':')]
 
         expire_view_cache(
             path,
