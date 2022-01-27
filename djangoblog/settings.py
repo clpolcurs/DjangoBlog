@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('DJANGO_SECRET_KEY')
+SECRET_KEY = env.str('DJANGO_SECRET_KEY', default="6n&fz#k_vf1bnmmb0h9u91gvr0+5mw9#$$b_a-@zcwr7vx)636")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.str('DJANGO_DEBUG', True)
 # DEBUG = False
@@ -117,7 +117,7 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 #     }}
 
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres://postgres:170891@django-blog-roy52.ondigitalocean.app:5432/djangoblog"),
+    "default": env.db("DATABASE_URL", default="postgres://postgres:170891@127.0.0.1:5432/tungblog"),
     "OPTIONS": {
         "charset": "utf8mb4"
     },
