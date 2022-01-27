@@ -117,7 +117,7 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 #     }}
 
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres://postgres:170891@tungblog.com:5432/djangoblog"),
+    "default": env.db("DATABASE_URL", default="postgres://postgres:170891@localhost:5432/djangoblog"),
     "OPTIONS": {
         "charset": "utf8mb4"
     },
