@@ -151,7 +151,7 @@ class CategoryDetailView(ArticleListView):
         categoryname = category.name
         self.categoryname = categoryname
         categorynames = list(
-            map(lambda c: c.name, category.get_sub_categorys()))
+            map(lambda c: c.name, category.get_sub_categories()))
         return Article.objects.filter(
             category__name__in=categorynames, status='p')
 

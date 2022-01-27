@@ -218,25 +218,25 @@ class Category(BaseModel):
         return categorys
     
     @cache_decorator(60 * 60 * 10)
-    def get_sub_categorys(self):
+    def get_sub_categories(self):
         """
         获得当前分类目录所有子集
         :return:
         """
-        categorys = []
-        all_categorys = Category.objects.all()
+        categories = []
+        all_categories = Category.objects.all()
         
         def parse(category):
-            if category not in categorys:
-                categorys.append(category)
-            childs = all_categorys.filter(parent_category=category)
-            for child in childs:
-                if category not in categorys:
-                    categorys.append(child)
+            if category not in categories:
+                categories.append(category)
+            children = all_categories.filter(parent_category=category)
+            for child in children:
+                if category not in categories:
+                    categories.append(child)
                 parse(child)
         
         parse(self)
-        return categorys
+        return categories
 
 
 class Tag(BaseModel):

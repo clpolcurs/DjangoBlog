@@ -69,14 +69,10 @@ class RegisterView(FormView):
                     content=content
             )
             
-            url = reverse('accounts:result') + \
-                  '?type=register&id=' + str(user.id)
+            url = reverse('accounts:result') + '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
         else:
-            return self.render_to_response({
-                'form': form
-            }
-            )
+            return self.render_to_response({'form': form})
 
 
 class LogoutView(RedirectView):

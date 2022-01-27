@@ -4,7 +4,7 @@ from djangoblog.utils import cache
 
 
 class Command(BaseCommand):
-    help = 'clear the whole cache'
+    help = 'Clear the whole cache'
 
     def handle(self, *args, **options):
         cache.clear()

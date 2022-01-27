@@ -5,10 +5,10 @@ from .models import Comment
 
 
 class CommentForm(ModelForm):
-    url = forms.URLField(label='网址', required=False)
-    email = forms.EmailField(label='电子邮箱', required=True)
+    url = forms.URLField(label='Url', required=False)
+    email = forms.EmailField(label='Email', required=True)
     name = forms.CharField(
-        label='姓名',
+        label='Fullname',
         widget=forms.TextInput(
             attrs={
                 'value': "",

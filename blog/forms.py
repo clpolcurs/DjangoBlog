@@ -7,13 +7,13 @@ logger = logging.getLogger(__name__)
 
 
 class BlogSearchForm(SearchForm):
-    querydata = forms.CharField(required=True)
+    query_data = forms.CharField(required=True)
 
     def search(self):
         datas = super(BlogSearchForm, self).search()
         if not self.is_valid():
             return self.no_query_found()
 
-        if self.cleaned_data['querydata']:
-            logger.info(self.cleaned_data['querydata'])
+        if self.cleaned_data['query_data']:
+            logger.info(self.cleaned_data['query_data'])
         return datas

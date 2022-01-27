@@ -33,7 +33,7 @@ class RegisterForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if get_user_model().objects.filter(email=email).exists():
-            raise ValidationError("该邮箱已经存在.")
+            raise ValidationError("This email already exists.")
         return email
 
     class Meta:
@@ -43,21 +43,21 @@ class RegisterForm(UserCreationForm):
 
 class ForgetPasswordForm(forms.Form):
     new_password1 = forms.CharField(
-        label="新密码",
+        label="New password",
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
-                'placeholder': "密码"
+                'placeholder': "password"
             }
         ),
     )
 
     new_password2 = forms.CharField(
-        label="确认密码",
+        label="Confirm Password",
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
-                'placeholder': "确认密码"
+                'placeholder': "Confirm Password"
             }
         ),
     )
@@ -73,11 +73,11 @@ class ForgetPasswordForm(forms.Form):
     )
 
     code = forms.CharField(
-        label='验证码',
+        label='Verification code',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': "验证码"
+                'placeholder': "Verification cod"
             }
         ),
     )
@@ -86,7 +86,7 @@ class ForgetPasswordForm(forms.Form):
         password1 = self.data.get("new_password1")
         password2 = self.data.get("new_password2")
         if password1 and password2 and password1 != password2:
-            raise ValidationError("两次密码不一致")
+            raise ValidationError("The two passwords do not match")
         password_validation.validate_password(password2)
 
         return password2
@@ -97,7 +97,7 @@ class ForgetPasswordForm(forms.Form):
                 email=user_email
         ).exists():
             # todo 这里的报错提示可以判断一个邮箱是不是注册过，如果不想暴露可以修改
-            raise ValidationError("未找到邮箱对应的用户")
+            raise ValidationError("The user corresponding to the email was not found")
         return user_email
 
     def clean_code(self):
@@ -113,5 +113,5 @@ class ForgetPasswordForm(forms.Form):
 
 class ForgetPasswordCodeForm(forms.Form):
     email = forms.EmailField(
-        label="邮箱号"
+        label="Email"
     )

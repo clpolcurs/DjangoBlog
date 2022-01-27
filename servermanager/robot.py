@@ -8,7 +8,7 @@ from django.conf import settings
 from djangoblog.utils import get_sha256
 from servermanager.api.blogapi import BlogApi
 from servermanager.api.commonapi import TuLing
-from servermanager.models import commands
+from servermanager.models import Commands
 from .MemcacheStorage import MemcacheStorage
 
 robot = WeRoBot(token=os.environ.get('DJANGO_WEROBOT_TOKEN')
@@ -33,9 +33,7 @@ def convert_to_articlereply(articles, message):
     from blog.templatetags.blog_tags import truncatechars_content
     for post in articles:
         imgs = re.findall(r'(?:http\:|https\:)?\/\/.*\.(?:png|jpg)', post.body)
-        imgurl = ''
-        if imgs:
-            imgurl = imgs[0]
+        imgurl = imgs[0] if imgs else ''
         article = Article(
             title=post.title,
             description=truncatechars_content(post.body),
@@ -53,27 +51,22 @@ def search(message, session):
     result = blogapi.search_articles(searchstr)
     if result:
         articles = list(map(lambda x: x.object, result))
-        reply = convert_to_articlereply(articles, message)
-        return reply
+        return convert_to_articlereply(articles, message)
     else:
-        return '没有找到相关文章。'
+        return 'No related articles were found.'
 
 
 @robot.filter(re.compile(r'^category\s*$', re.I))
 def category(message, session):
-    categorys = blogapi.get_category_lists()
-    content = ','.join(map(lambda x: x.name, categorys))
-    return '所有文章分类目录：' + content
+    categories = blogapi.get_category_lists()
+    content = ','.join(map(lambda x: x.name, categories))
+    return 'All article categories：' + content
 
 
 @robot.filter(re.compile(r'^recent\s*$', re.I))
 def recents(message, session):
     articles = blogapi.get_recent_articles()
-    if articles:
-        reply = convert_to_articlereply(articles, message)
-        return reply
-    else:
-        return "暂时还没有文章"
+    return convert_to_articlereply(articles, message) if articles else "No articles yet"
 
 
 @robot.filter(re.compile('^help$', re.I))
@@ -100,12 +93,12 @@ def help(message, session):
 
 @robot.filter(re.compile(r'^weather\:.*$', re.I))
 def weather(message, session):
-    return "建设中..."
+    return "Building in progress ..."
 
 
 @robot.filter(re.compile(r'^idcard\:.*$', re.I))
 def idcard(message, session):
-    return "建设中..."
+    return "Building in progress .."
 
 
 @robot.handler
@@ -114,9 +107,9 @@ def echo(message, session):
     return handler.handler()
 
 
-class CommandHandler():
+class CommandHandler:
     def __init__(self):
-        self.commands = commands.objects.all()
+        self.commands = Commands.objects.all()
 
     def run(self, title):
         cmd = list(
@@ -126,26 +119,22 @@ class CommandHandler():
         if cmd:
             return self.__run_command__(cmd[0].command)
         else:
-            return "未找到相关命令，请输入hepme获得帮助。"
+            return "No related command found, please enter helpme for help."
 
     def __run_command__(self, cmd):
         try:
-            str = os.popen(cmd).read()
-            return str
+            return os.popen(cmd).read()
         except BaseException:
-            return '命令执行出错!'
+            return 'Command execution error!'
 
     def get_help(self):
-        rsp = ''
-        for cmd in self.commands:
-            rsp += '{c}:{d}\n'.format(c=cmd.title, d=cmd.describe)
-        return rsp
+        return ''.join('{c}:{d}\n'.format(c=cmd.title, d=cmd.describe) for cmd in self.commands)
 
 
 cmdhandler = CommandHandler()
 
 
-class MessageHandler():
+class MessageHandler:
     def __init__(self, message, session):
         userid = message.source
         self.message = message
@@ -174,40 +163,39 @@ class MessageHandler():
         info = self.message.content
 
         if self.userinfo.isAdmin and info.upper() == 'EXIT':
-            self.userinfo = WxUserInfo()
-            self.savesession()
-            return "退出成功"
+            return self._extracted_from_handler_5("Exit successfully")
         if info.upper() == 'ADMIN':
             self.userinfo.isAdmin = True
             self.savesession()
-            return "输入管理员密码"
+            return "Enter administrator password"
         if self.userinfo.isAdmin and not self.userinfo.isPasswordSet:
-            passwd = settings.WXADMIN
-            if settings.TESTING:
-                passwd = '123'
+            passwd = '123' if settings.TESTING else settings.WXADMIN
             if passwd.upper() == get_sha256(get_sha256(info)).upper():
                 self.userinfo.isPasswordSet = True
                 self.savesession()
-                return "验证通过,请输入命令或者要执行的命令代码:输入helpme获得帮助"
+                return "The verification is passed, please enter the command or the command code to be executed: " \
+                       "Enter helpme for help "
             else:
                 if self.userinfo.Count >= 3:
-                    self.userinfo = WxUserInfo()
-                    self.savesession()
-                    return "超过验证次数"
+                    return self._extracted_from_handler_5("Exceeded the number of verifications")
                 self.userinfo.Count += 1
                 self.savesession()
-                return "验证失败，请重新输入管理员密码:"
+                return "Authentication failed, please re-enter the administrator password:"
         if self.userinfo.isAdmin and self.userinfo.isPasswordSet:
             if self.userinfo.Command != '' and info.upper() == 'Y':
                 return cmdhandler.run(self.userinfo.Command)
-            else:
-                if info.upper() == 'HELPME':
-                    return cmdhandler.get_help()
-                self.userinfo.Command = info
-                self.savesession()
-                return "确认执行: " + info + " 命令?"
-        rsp = tuling.getdata(info)
-        return rsp
+            if info.upper() == 'HELPME':
+                return cmdhandler.get_help()
+            self.userinfo.Command = info
+            self.savesession()
+            return "Confirm execution: " + info + " command?"
+        return tuling.getdata(info)
+
+    # TODO Rename this here and in `handler`
+    def _extracted_from_handler_5(self, arg0):
+        self.userinfo = WxUserInfo()
+        self.savesession()
+        return arg0
 
 
 class WxUserInfo():

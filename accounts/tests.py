@@ -144,13 +144,13 @@ class AccountTest(TestCase):
             path=reverse("account:forget_password_code"),
             data=dict()
         )
-        self.assertEqual(resp.content.decode("utf-8"), "错误的邮箱")
+        self.assertEqual(resp.content.decode("utf-8"), "Invalid email")
 
         resp = self.client.post(
             path=reverse("account:forget_password_code"),
             data=dict(email="admin@com")
         )
-        self.assertEqual(resp.content.decode("utf-8"), "错误的邮箱")
+        self.assertEqual(resp.content.decode("utf-8"), "Invalid email")
 
     def test_forget_password_email_success(self):
         code = generate_code()
@@ -191,7 +191,7 @@ class AccountTest(TestCase):
             response=resp,
             form="form",
             field="email",
-            errors="未找到邮箱对应的用户"
+            errors="The user corresponding to the email was not found"
         )
 
     def test_forget_password_email_code_error(self):
@@ -213,5 +213,5 @@ class AccountTest(TestCase):
             response=resp,
             form="form",
             field="code",
-            errors="验证码错误"
+            errors="Verification code error"
         )

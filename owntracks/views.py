@@ -72,12 +72,12 @@ def convert_to_amap(locations):
     it = iter(locations)
 
     item = list(itertools.islice(it, 30))
+    key = '8440a376dfc9743d8924bf0ad141f28e'
+    api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
     while item:
         datas = ';'.join(
             set(map(lambda x: str(x.lon) + ',' + str(x.lat), item)))
 
-        key = '8440a376dfc9743d8924bf0ad141f28e'
-        api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
         query = {
             'key': key,
             'locations': datas,
@@ -97,28 +97,24 @@ def get_datas(request):
     from django.utils.timezone import utc
 
     now = django.utils.timezone.now().replace(tzinfo=utc)
-    querydate = django.utils.timezone.datetime(
+    query_date = django.utils.timezone.datetime(
         now.year, now.month, now.day, 0, 0, 0)
     if request.GET.get('date', None):
         date = list(map(lambda x: int(x), request.GET.get('date').split('-')))
-        querydate = django.utils.timezone.datetime(
+        query_date = django.utils.timezone.datetime(
             date[0], date[1], date[2], 0, 0, 0)
-    querydate = django.utils.timezone.make_aware(querydate)
-    nextdate = querydate + datetime.timedelta(days=1)
+    query_date = django.utils.timezone.make_aware(query_date)
+    next_date = query_date + datetime.timedelta(days=1)
     models = OwnTrackLog.objects.filter(
-        created_time__range=(querydate, nextdate))
-    result = list()
+        created_time__range=(query_date, next_date))
+    result = []
     if models and len(models):
         for tid, item in groupby(
                 sorted(models, key=lambda k: k.tid), key=lambda k: k.tid):
 
-            d = dict()
-            d["name"] = tid
-            paths = list()
             locations = convert_to_amap(
                 sorted(item, key=lambda x: x.created_time))
-            for i in locations.split(';'):
-                paths.append(i.split(','))
-            d["path"] = paths
+            paths = [i.split(',') for i in locations.split(';')]
+            d = {'name': tid, 'path': paths}
             result.append(d)
     return JsonResponse(result, safe=False)

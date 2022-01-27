@@ -124,7 +124,7 @@ class WBOauthManager(BaseOauthManager):
             user = OAuthUser()
             user.matedata = rsp
             user.picture = datas['avatar_large']
-            user.nikename = datas['screen_name']
+            user.nickname = datas['screen_name']
             user.openid = datas['id']
             user.type = 'weibo'
             user.token = self.access_token
@@ -199,7 +199,7 @@ class GoogleOauthManager(BaseOauthManager):
             user = OAuthUser()
             user.matedata = rsp
             user.picture = datas['picture']
-            user.nikename = datas['name']
+            user.nickname = datas['name']
             user.openid = datas['sub']
             user.token = self.access_token
             user.type = 'google'
@@ -268,7 +268,7 @@ class GitHubOauthManager(BaseOauthManager):
             datas = json.loads(rsp)
             user = OAuthUser()
             user.picture = datas['avatar_url']
-            user.nikename = datas['name']
+            user.nickname = datas['name']
             user.openid = datas['id']
             user.type = 'github'
             user.token = self.access_token
@@ -337,7 +337,7 @@ class FaceBookOauthManager(BaseOauthManager):
             rsp = self.do_get(self.API_URL, params)
             datas = json.loads(rsp)
             user = OAuthUser()
-            user.nikename = datas['name']
+            user.nickname = datas['name']
             user.openid = datas['id']
             user.type = 'facebook'
             user.token = self.access_token
@@ -425,7 +425,7 @@ class QQOauthManager(BaseOauthManager):
             logger.info(rsp)
             obj = json.loads(rsp)
             user = OAuthUser()
-            user.nikename = obj['nickname']
+            user.nickname = obj['nickname']
             user.openid = openid
             user.type = 'qq'
             user.token = self.access_token
