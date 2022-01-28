@@ -19,8 +19,8 @@
     {% endfor %}
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 
-{#    <meta name="description" content="{{ article.body|custom_markdown|striptags|truncatewords:1 }}"/>#}
-    <meta name="description" content="{{ article.body|custom_markdown|striptags }}"/>
+    <meta name="description" content="{{ article.body|custom_markdown|striptags|truncatewords:2 }}"/>
+{#    <meta name="description" content="{{ article.body|custom_markdown|striptags }}"/>#}
     {% if article.tags %}
         <meta name="keywords" content="{{ article.tags.all|join:"," }}"/>
     {% else %}
