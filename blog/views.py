@@ -55,11 +55,11 @@ class ArticleListView(ListView):
         raise NotImplementedError()
 
     def get_queryset_from_cache(self, cache_key):
-        '''
+        """
         缓存页面数据
         :param cache_key: 缓存key
         :return:
-        '''
+        """
         value = cache.get(cache_key)
         if value:
             logger.info('get view cache.key:{key}'.format(key=cache_key))
@@ -71,10 +71,10 @@ class ArticleListView(ListView):
             return article_list
 
     def get_queryset(self):
-        '''
+        """
         重写默认，从缓存获取数据
         :return:
-        '''
+        """
         key = self.get_queryset_cache_key()
         return self.get_queryset_from_cache(key)
 
@@ -84,9 +84,9 @@ class ArticleListView(ListView):
 
 
 class IndexView(ArticleListView):
-    '''
+    """
     首页
-    '''
+    """
     # 友情链接类型
     link_type = LinkShowType.I
 
@@ -98,9 +98,9 @@ class IndexView(ArticleListView):
 
 
 class ArticleDetailView(DetailView):
-    '''
+    """
     文章详情页面
-    '''
+    """
     template_name = 'blog/article_detail.html'
     model = Article
     pk_url_kwarg = 'article_id'
@@ -256,45 +256,43 @@ def fileupload(request):
     :param request:
     :return:
     """
-    if request.method == 'POST':
-        sign = request.GET.get('sign', None)
-        if not sign:
-            return HttpResponseForbidden()
-        if not sign == get_sha256(get_sha256(settings.SECRET_KEY)):
-            return HttpResponseForbidden()
-        response = []
-        for filename in request.FILES:
-            timestr = datetime.datetime.now().strftime('%Y/%m/%d')
-            imgextensions = ['jpg', 'png', 'jpeg', 'bmp']
-            fname = u''.join(str(filename))
-            isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
-            blogsetting = get_blog_setting()
-
-            basepath = r'{basedir}/{type}/{timestr}'.format(
-                basedir=blogsetting.resource_path,
-                type='files' if not isimage else 'image',
-                timestr=timestr)
-            if settings.TESTING:
-                basepath = settings.BASE_DIR + '/uploads'
-            url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
-                type='files' if not isimage else 'image', timestr=timestr, filename=filename)
-            if not os.path.exists(basepath):
-                os.makedirs(basepath)
-            savepath = os.path.normpath(os.path.join(basepath, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}"))
-            if not savepath.startswith(basepath):
-                return HttpResponse("only for post")
-            with open(savepath, 'wb+') as wfile:
-                for chunk in request.FILES[filename].chunks():
-                    wfile.write(chunk)
-            if isimage:
-                from PIL import Image
-                image = Image.open(savepath)
-                image.save(savepath, quality=20, optimize=True)
-            response.append(url)
-        return HttpResponse(response)
-
-    else:
+    if request.method != 'POST':
         return HttpResponse("only for post")
+    sign = request.GET.get('sign', None)
+    if not sign:
+        return HttpResponseForbidden()
+    if sign != get_sha256(get_sha256(settings.SECRET_KEY)):
+        return HttpResponseForbidden()
+    response = []
+    for filename in request.FILES:
+        timestr = datetime.datetime.now().strftime('%Y/%m/%d')
+        imgextensions = ['jpg', 'png', 'jpeg', 'bmp']
+        fname = u''.join(str(filename))
+        isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
+        blogsetting = get_blog_setting()
+
+        basepath = r'{basedir}/{type}/{timestr}'.format(
+            basedir=blogsetting.resource_path,
+            type='files' if not isimage else 'image',
+            timestr=timestr)
+        if settings.TESTING:
+            basepath = settings.BASE_DIR + '/uploads'
+        url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
+            type='files' if not isimage else 'image', timestr=timestr, filename=filename)
+        if not os.path.exists(basepath):
+            os.makedirs(basepath)
+        savepath = os.path.normpath(os.path.join(basepath, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}"))
+        if not savepath.startswith(basepath):
+            return HttpResponse("only for post")
+        with open(savepath, 'wb+') as wfile:
+            for chunk in request.FILES[filename].chunks():
+                wfile.write(chunk)
+        if isimage:
+            from PIL import Image
+            image = Image.open(savepath)
+            image.save(savepath, quality=20, optimize=True)
+        response.append(url)
+    return HttpResponse(response)
 
 
 def page_not_found_view(
@@ -306,7 +304,8 @@ def page_not_found_view(
     url = request.get_full_path()
     return render(request,
                   template_name,
-                  {'message': 'Oops, the address you visited ' + url + ' is an unknown place. Please click on the home page to see other?',
+                  {'message': 'Oops, the address you visited ' + url + 'is an unknown place. Please click on the home '
+                                                                       'page to see other?',
                    'statuscode': '404'},
                   status=404)
 
@@ -314,7 +313,8 @@ def page_not_found_view(
 def server_error_view(request, template_name='blog/error_page.html'):
     return render(request,
                   template_name,
-                  {'message': 'Oops, something went wrong, I have already collected the error information, I will rush to repair it later, please click on the home page to see other?',
+                  {'message': 'Oops, something went wrong, I have already collected the error information, '
+                              'I will rush to repair it later, please click on the home page to see other?',
                    'statuscode': '500'},
                   status=500)
 
@@ -327,4 +327,5 @@ def permission_denied_view(
         logger.error(exception)
     return render(
         request, template_name, {
-            'message': 'Oops, you don`t have permission to access this page, please click the home page to see something else?', 'statuscode': '403'}, status=403)
+            'message': 'Oops, you don`t have permission to access this page, please click the home page to see '
+                       'something else?', 'statuscode': '403'}, status=403)
