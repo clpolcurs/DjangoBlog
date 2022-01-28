@@ -19,8 +19,7 @@
     {% endfor %}
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 
-    <meta name="description" content="{{ article.body|custom_markdown|striptags|truncatewords:2 }}"/>
-{#    <meta name="description" content="{{ article.body|custom_markdown|striptags }}"/>#}
+    <meta name="description" content="{{ article.body|custom_markdown|striptags|truncatewords:1 }}"/>
     {% if article.tags %}
         <meta name="keywords" content="{{ article.tags.all|join:"," }}"/>
     {% else %}
@@ -58,8 +57,10 @@
                 {% include 'comments/tags/post_comment.html' %}
             {% else %}
                 <div class="comments-area">
-                    <h3 class="comment-meta">You are not logged in<a
-                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">Log in</a>Write a comment
+                    <h3 class="comment-meta">You are not logged in
+                        <br>
+                        <br>
+                        <a href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">Log in</a> to write a comment
                     </h3>
 
                     {% load oauth_tags %}

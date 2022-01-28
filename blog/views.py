@@ -139,9 +139,9 @@ class ArticleDetailView(DetailView):
 
 
 class CategoryDetailView(ArticleListView):
-    '''
+    """
     分类目录列表
-    '''
+    """
     page_type = "Category Archives"
 
     def get_queryset_data(self):
@@ -176,9 +176,9 @@ class CategoryDetailView(ArticleListView):
 
 
 class AuthorDetailView(ArticleListView):
-    '''
+    """
     作者详情页
-    '''
+    """
     page_type = 'Author Archive'
 
     def get_queryset_cache_key(self):
@@ -198,9 +198,9 @@ class AuthorDetailView(ArticleListView):
 
 
 class TagDetailView(ArticleListView):
-    '''
+    """
     标签列表页面
-    '''
+    """
     page_type = 'Tag Archive'
 
     def get_queryset_data(self):
@@ -226,9 +226,9 @@ class TagDetailView(ArticleListView):
 
 
 class ArchivesView(ArticleListView):
-    '''
+    """
     文章归档页面
-    '''
+    """
     page_type = 'Article Archive'
     paginate_by = None
     page_kwarg = None
@@ -266,23 +266,23 @@ def fileupload(request):
     response = []
     for filename in request.FILES:
         timestr = datetime.datetime.now().strftime('%Y/%m/%d')
-        imgextensions = ['jpg', 'png', 'jpeg', 'bmp']
+        img_extensions = ['jpg', 'png', 'jpeg', 'bmp']
         fname = u''.join(str(filename))
-        isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
-        blogsetting = get_blog_setting()
+        isimage = len([i for i in img_extensions if fname.find(i) >= 0]) > 0
+        blog_setting = get_blog_setting()
 
-        basepath = r'{basedir}/{type}/{timestr}'.format(
-            basedir=blogsetting.resource_path,
+        base_path = r'{basedir}/{type}/{timestr}'.format(
+            basedir=blog_setting.resource_path,
             type='files' if not isimage else 'image',
             timestr=timestr)
         if settings.TESTING:
-            basepath = settings.BASE_DIR + '/uploads'
+            base_path = settings.BASE_DIR + '/uploads'
         url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
             type='files' if not isimage else 'image', timestr=timestr, filename=filename)
-        if not os.path.exists(basepath):
-            os.makedirs(basepath)
-        savepath = os.path.normpath(os.path.join(basepath, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}"))
-        if not savepath.startswith(basepath):
+        if not os.path.exists(base_path):
+            os.makedirs(base_path)
+        savepath = os.path.normpath(os.path.join(base_path, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}"))
+        if not savepath.startswith(base_path):
             return HttpResponse("only for post")
         with open(savepath, 'wb+') as wfile:
             for chunk in request.FILES[filename].chunks():

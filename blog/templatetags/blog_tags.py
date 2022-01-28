@@ -60,7 +60,7 @@ def get_markdown_toc(content):
 @stringfilter
 def truncatechars_content(content):
     """
-    获得文章内容的摘要
+    Get a summary of the article
     :param content:
     :return:
     """

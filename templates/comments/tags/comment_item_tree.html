@@ -26,7 +26,7 @@
         </div>
         <p>
             {% if comment_item.parent_comment %}
-                <div>回复 <a
+                <div>Reply <a
                         href="#comment-{{ comment_item.parent_comment.pk }}">@{{ comment_item.parent_comment.author.username }}</a>
                 </div>
             {% endif %}
@@ -37,7 +37,7 @@
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"
                               onclick="do_reply({{ comment_item.pk }})"
-                              aria-label="回复给{{ comment_item.author.username }}">回复</a></div>
+                              aria-label="回复给{{ comment_item.author.username }}">Reply</a></div>
     </div>
 
 </li><!-- #comment-## -->
