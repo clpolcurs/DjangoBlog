@@ -32,10 +32,10 @@
             <a class="url fn n" href="{{ article.author.get_absolute_url }}"
                title="查看所有由{{ article.author.username }}published articles"
                rel="author">
-            <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-                <span itemprop="name" itemprop="publisher">{{ article.author.username }}</span>
-            </span>
-    </a>
+                <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                    <span itemprop="name" itemprop="publisher">{{ article.author.username }}</span>
+                </span>
+            </a>
         </span>.
                 {% if user.is_superuser %}
                     <a href="{{ article.get_admin_url }}">Edit</a>

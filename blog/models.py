@@ -288,7 +288,7 @@ class Links(models.Model):
 
 
 class SideBar(models.Model):
-    """侧边栏,可以展示一些html内容"""
+    """Display some html content"""
     name = models.CharField('Title', max_length=100)
     content = models.TextField("Content")
     sequence = models.IntegerField('Sequence', unique=True)
@@ -299,14 +299,14 @@ class SideBar(models.Model):
     class Meta:
         ordering = ['sequence']
         verbose_name = 'Sidebar'
-        verbose_name_plural = verbose_name
+        verbose_name_plural = "Sidebars"
     
     def __str__(self):
         return self.name
 
 
 class BlogSettings(models.Model):
-    '''站点设置 '''
+    """站点设置 """
     sitename = models.CharField(
             "Website Name",
             max_length=200,
