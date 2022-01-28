@@ -36,7 +36,7 @@ DEBUG = env.str('DJANGO_DEBUG', True)
 # DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
-ALLOWED_HOSTS = ['*', 'localhost', 'tungblog-d47vt.ondigitalocean.app']
+ALLOWED_HOSTS = ['*', 'localhost', 'tungblog-d47vt.ondigitalocean.app', 'tungblog.com.vn']
 # ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", default="localhost")
 # Application definition
 
