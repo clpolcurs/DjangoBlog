@@ -10,9 +10,7 @@ logger = logging.getLogger(__name__)
 def seo_processor(requests):
     key = 'seo_processor'
     value = cache.get(key)
-    if value:
-        return value
-    else:
+    if not value:
         logger.info('set processor cache.')
         setting = get_blog_setting()
         value = {
@@ -34,5 +32,5 @@ def seo_processor(requests):
             "BEIAN_CODE_GONGAN": setting.gongan_beiancode,
             "SHOW_GONGAN_CODE": setting.show_gongan_code,
             "CURRENT_YEAR": datetime.now().year}
-        cache.set(key, value, 60 * 60 * 10)
-        return value
+        cache.set(key, value, 60**2 * 10)
+    return value

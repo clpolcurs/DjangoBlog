@@ -129,8 +129,7 @@ class Article(BaseModel):
             'year': self.created_time.year,
             'month': self.created_time.month,
             'day': self.created_time.day
-        }
-                       )
+        })
     
     @cache_decorator(60**2 * 10)
     def get_category_tree(self):
@@ -349,8 +348,8 @@ class BlogSettings(models.Model):
     analyticscode = models.TextField(
             "Website Statistics Code",
             max_length=1000,
-            null=False,
-            blank=False,
+            null=True,
+            blank=True,
             default=''
     )
     show_gongan_code = models.BooleanField(
