@@ -7,7 +7,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 body {
-    line-height: 1;
+    line-height: 0.5;
 }
 
 ol,
@@ -771,10 +771,10 @@ footer[role="contentinfo"] a:hover {
 
 .entry-header .comments-link {
     margin-top: 24px;
-    margin-top: 1.714285714rem;
+    margin-top: 1rem;
     font-size: 13px;
-    font-size: 0.928571429rem;
-    line-height: 1.846153846;
+    /*font-size: 0.928571429rem;*/
+    line-height: 3;
     color: #757575;
 }
 
@@ -803,7 +803,7 @@ article.sticky .featured-post {
 .entry-content,
 .entry-summary,
 .mu_register {
-    line-height: 1.714285714;
+    line-height: 1;
 }
 
 .entry-content h1,
@@ -871,7 +871,7 @@ article.sticky .featured-post {
 .comment-content p,
 .mu_register p {
     margin: 0 0 24px;
-    margin: 0 0 1.714285714rem;
+    margin: 0 0 0.5rem;
     line-height: 1.714285714;
 }
 
@@ -940,9 +940,9 @@ article.sticky .featured-post {
 .entry-content code,
 .comment-content code {
     font-family: Consolas, Monaco, Lucida Console, monospace;
-    font-size: 12px;
-    font-size: 0.857142857rem;
-    line-height: 2;
+    /*font-size: 12px;*/
+    font-size: 1rem;
+    line-height: 1;
 }
 
 .entry-content pre,
@@ -952,12 +952,12 @@ article.sticky .featured-post {
     font-family: Consolas, Monaco, Lucida Console, monospace;
     font-size: 12px;
     font-size: 0.857142857rem;
-    line-height: 1.714285714;
+    line-height: 1;
     margin: 24px 0;
     margin: 1.714285714rem 0;
     overflow: auto;
     padding: 24px;
-    padding: 1.714285714rem;
+    padding: 0.6rem;
 }
 
 .entry-content pre code,
