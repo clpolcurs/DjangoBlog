@@ -942,7 +942,7 @@ article.sticky .featured-post {
     font-family: Consolas, Monaco, Lucida Console, monospace;
     /*font-size: 12px;*/
     font-size: 1rem;
-    line-height: 1;
+    line-height: 1.3;
 }
 
 .entry-content pre,
